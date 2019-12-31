@@ -1,14 +1,14 @@
 -- Enlever l'héritage => Possède 2 fenêtre superposée (ZOrder)
 -- 1 transparente et 1 pour le couleur
 
-local LayoutMode = {
+LayoutMode = {
     Left = {},
     Right = {},
     Mid = {},
     Mid2 = {} --Mid mais aussi en haut
 }
 
-local TextPosition = {
+TextPosition = {
     Top = {},
     Bottom = {},
 }
@@ -22,8 +22,8 @@ function Bar:Constructor()
     self.quickslotsWidth = 1
     self.quickslotsHeight = 1
     self.quickslotsLayout = LayoutMode.Left
-    self.quickslotsInterstice = 0
-    self.quickslotsBorder = 1
+    self.quickslotsInterstice = 20
+    self.quickslotsBorder = 40
 
     self.label = Turbine.UI.Label()
     self.label:SetParent(self)
@@ -54,9 +54,55 @@ function Bar:Update()
         self.quickslotsWidth = math.min(self.quickslotsWidth, #self.quickslots)
         self.quickslotsHeight = math.ceil(#self.quickslots / self.quickslotsWidth)
 
-        for i, x in ipairs(self.quickslots) do
-            i = i - 1
-            x:SetPosition(-2 + self.quickslotsBorder + (i % self.quickslotsWidth) * self:GetQuickslotsSize() + (i % self.quickslotsWidth) * self.quickslotsInterstice, self.quickslotsBorder - 2 + math.floor(i / self.quickslotsWidth) * self:GetQuickslotsSize() + (math.floor(i / self.quickslotsWidth)) * self.quickslotsInterstice)
+        if self.textPosition == TextPosition.Top then
+            offset = self.label:GetHeight()
+        else
+            offset = 0
+        end
+
+        if self.quickslotsLayout == LayoutMode.Left then
+            for i, x in ipairs(self.quickslots) do
+                i = i - 1
+                x:SetPosition(-2 + self.quickslotsBorder + (i % self.quickslotsWidth) * self:GetQuickslotsSize() + (i % self.quickslotsWidth) * self.quickslotsInterstice, self.quickslotsBorder - 2 + math.floor(i / self.quickslotsWidth) * self:GetQuickslotsSize() + (math.floor(i / self.quickslotsWidth)) * self.quickslotsInterstice)
+            end
+        elseif self.quickslotsLayout == LayoutMode.Right then
+            for i, x in ipairs(self.quickslots) do
+                if math.ceil(i / self.quickslotsWidth) == self.quickslotsHeight and #self.quickslots % self.quickslotsWidth ~= 0 then
+                    i = i - 1
+                    x:SetPosition(-2 + self.quickslotsBorder + (i % self.quickslotsWidth + self.quickslotsWidth - #self.quickslots % self.quickslotsWidth) * self:GetQuickslotsSize() + (i % self.quickslotsWidth + self.quickslotsWidth - #self.quickslots % self.quickslotsWidth) * self.quickslotsInterstice, self.quickslotsBorder - 2 + math.floor(i / self.quickslotsWidth) * self:GetQuickslotsSize() + (math.floor(i / self.quickslotsWidth)) * self.quickslotsInterstice)
+                else
+                    i = i - 1
+                    x:SetPosition(-2 + self.quickslotsBorder + (i % self.quickslotsWidth) * self:GetQuickslotsSize() + (i % self.quickslotsWidth) * self.quickslotsInterstice, self.quickslotsBorder - 2 + math.floor(i / self.quickslotsWidth) * self:GetQuickslotsSize() + (math.floor(i / self.quickslotsWidth)) * self.quickslotsInterstice)
+                end
+            end
+        elseif self.quickslotsLayout == LayoutMode.Mid then
+            for i, x in ipairs(self.quickslots) do
+                if math.ceil(i / self.quickslotsWidth) == self.quickslotsHeight and #self.quickslots % self.quickslotsWidth ~= 0 then
+                    i = i - 1
+                    x:SetPosition(-2 + self.quickslotsBorder + (i % self.quickslotsWidth + (self.quickslotsWidth - #self.quickslots % self.quickslotsWidth) / 2) * self:GetQuickslotsSize() + (i % self.quickslotsWidth + (self.quickslotsWidth - #self.quickslots % self.quickslotsWidth) / 2) * self.quickslotsInterstice, self.quickslotsBorder - 2 + math.floor(i / self.quickslotsWidth) * self:GetQuickslotsSize() + (math.floor(i / self.quickslotsWidth)) * self.quickslotsInterstice)
+                else
+                    i = i - 1
+                    x:SetPosition(-2 + self.quickslotsBorder + (i % self.quickslotsWidth) * self:GetQuickslotsSize() + (i % self.quickslotsWidth) * self.quickslotsInterstice, self.quickslotsBorder - 2 + math.floor(i / self.quickslotsWidth) * self:GetQuickslotsSize() + (math.floor(i / self.quickslotsWidth)) * self.quickslotsInterstice)
+                end
+            end 
+        elseif self.quickslotsLayout == LayoutMode.Mid2 then
+            --Nombre en haut + en bas
+            nb = math.min(#self.quickslots, math.ceil((self.quickslotsWidth + (#self.quickslots - 1) % self.quickslotsWidth + 1) / 2))
+            for i, x in ipairs(self.quickslots) do
+                if i <= nb then
+                    i = i - 1
+                    x:SetPosition(-2 + self.quickslotsBorder + (i % self.quickslotsWidth + (self.quickslotsWidth - nb) / 2) * self:GetQuickslotsSize() + (i % self.quickslotsWidth + (self.quickslotsWidth - nb) / 2) * self.quickslotsInterstice, self.quickslotsBorder - 2)
+                else
+                    i = i - nb
+                    if  (1 + math.ceil(i / self.quickslotsWidth)) == self.quickslotsHeight and ((#self.quickslots - nb) % self.quickslotsWidth) ~= 0 then
+                        i = i - 1
+                        x:SetPosition(-2 + self.quickslotsBorder + (i % self.quickslotsWidth + (self.quickslotsWidth - (#self.quickslots - nb) % self.quickslotsWidth) / 2) * self:GetQuickslotsSize() + (i % self.quickslotsWidth + (self.quickslotsWidth - (#self.quickslots - nb) % self.quickslotsWidth) / 2) * self.quickslotsInterstice, self.quickslotsBorder - 2 + (1 + math.floor(i / self.quickslotsWidth)) * self:GetQuickslotsSize() + (1 + math.floor(i / self.quickslotsWidth)) * self.quickslotsInterstice)
+                    else
+                        i = i - 1
+                        x:SetPosition(-2 + self.quickslotsBorder + (i % self.quickslotsWidth) * self:GetQuickslotsSize() + (i % self.quickslotsWidth) * self.quickslotsInterstice, self.quickslotsBorder - 2 + (1 + math.floor(i / self.quickslotsWidth)) * self:GetQuickslotsSize() + (1 + math.floor(i / self.quickslotsWidth)) * self.quickslotsInterstice)
+                    end
+                end
+            end
         end
     end
 
@@ -64,13 +110,18 @@ function Bar:Update()
         self:SetSize(2 * self.quickslotsBorder + self.quickslotsWidth * self:GetQuickslotsSize() + (self.quickslotsWidth - 1) * self.quickslotsInterstice, 2 * self.quickslotsBorder + self.quickslotsHeight * self:GetQuickslotsSize() + (self.quickslotsHeight - 1) * self.quickslotsInterstice + self.label:GetHeight())
         self.fond:SetSize(2 * self.quickslotsBorder + self.quickslotsWidth * self:GetQuickslotsSize() + (self.quickslotsWidth - 1) * self.quickslotsInterstice, 2 * self.quickslotsBorder + self.quickslotsHeight * self:GetQuickslotsSize() + (self.quickslotsHeight - 1) * self.quickslotsInterstice + self.label:GetHeight())
         self.label:SetWidth(self:GetWidth())
-        self.label:SetTop(self:GetHeight() - self.label:GetHeight())
+        if (self.textPosition == TextPosition.Top) then
+            self.label:SetTop(0)
+        else
+            self.label:SetTop(self:GetHeight() - self.label:GetHeight())
+        end
         self.label:SetVisible(true)
     else
         self:SetSize(2 * self.quickslotsBorder + self.quickslotsWidth * self:GetQuickslotsSize() + (self.quickslotsWidth - 1) * self.quickslotsInterstice, 2 * self.quickslotsBorder + self.quickslotsHeight * self:GetQuickslotsSize() + (self.quickslotsHeight - 1) * self.quickslotsInterstice)
         self.fond:SetSize(2 * self.quickslotsBorder + self.quickslotsWidth * self:GetQuickslotsSize() + (self.quickslotsWidth - 1) * self.quickslotsInterstice, 2 * self.quickslotsBorder + self.quickslotsHeight * self:GetQuickslotsSize() + (self.quickslotsHeight - 1) * self.quickslotsInterstice)
         self.label:SetVisible(false)
     end
+
 
     
 end
@@ -91,7 +142,6 @@ function Bar:SetQuickslots(value)
         x:SetParent(self)
         x:SetZOrder(2)
         x:SetVisible(true)
-        Turbine.Shell.WriteLine(self:GetQuickslotsSize()) --/!\ ICI DEBUG
     end
 
     self:Update()
