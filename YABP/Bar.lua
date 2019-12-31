@@ -1,6 +1,3 @@
--- Enlever l'héritage => Possède 2 fenêtre superposée (ZOrder)
--- 1 transparente et 1 pour le couleur
-
 LayoutMode = {
     Left = {},
     Right = {},
@@ -191,7 +188,7 @@ end
 
 function Bar:GetQuickslotsSize()
     if self.quickslots[1] == nil then
-        return 32
+        return 35
     else
         return self.quickslots[1]:GetHeight()
     end
