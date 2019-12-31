@@ -1,0 +1,7 @@
+import "Turbine"
+import "Turbine.Gameplay"
+import "Turbine.Gameplay.Attributes"
+import "Turbine.UI"
+import "Turbine.UI.Lotro"
+import "Nindyr.YABP.Localization"
+import "Nindyr.YABP.Bar"

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Plugin>
+  <Information>
+    <Name>YABP</Name>
+    <Author>Nindyr</Author>
+    <Version>0.0</Version>
+    <Description>Yet Another Bars Plugin</Description>
+    <Image>Nindyr/YABP/Resources/YABP.tga</Image>
+  </Information>
+  <Package>Nindyr.YABP.Main</Package>
+    <Configuration Apartment="YABP" />
+</Plugin>
