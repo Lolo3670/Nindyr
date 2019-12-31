@@ -22,8 +22,8 @@ function Bar:Constructor()
     self.quickslotsWidth = 1
     self.quickslotsHeight = 1
     self.quickslotsLayout = LayoutMode.Left
-    self.quickslotsInterstice = 20
-    self.quickslotsBorder = 40
+    self.quickslotsInterstice = 0
+    self.quickslotsBorder = 1
 
     self.label = Turbine.UI.Label()
     self.label:SetParent(self)
