@@ -1,5 +1,5 @@
 _G.Triggers = {} --Table (key = name) of Array of Structure : Effet, Arg
-_G.Effects = {} --Table (key = name) of function with 1 argument
+_G.Effects = {} --Table (key = name) of function with argument packs (use unpack)
 
 function AddCallback(object, event, callback)
     if (object[event] == nil) then

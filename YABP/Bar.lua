@@ -118,9 +118,6 @@ function Bar:Update()
         self.fond:SetSize(2 * self.quickslotsBorder + self.quickslotsWidth * self:GetQuickslotsSize() + (self.quickslotsWidth - 1) * self.quickslotsInterstice, 2 * self.quickslotsBorder + self.quickslotsHeight * self:GetQuickslotsSize() + (self.quickslotsHeight - 1) * self.quickslotsInterstice)
         self.label:SetVisible(false)
     end
-
-
-    
 end
 
 function Bar:SetTextSize(value)
